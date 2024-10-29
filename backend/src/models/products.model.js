@@ -1,4 +1,3 @@
-// models/Product.js
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
@@ -16,8 +15,20 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+  inCart: {
+    type: Boolean,
+    default: false,
+  },
+  cartQuantity: {
+    type: Number,
+    default: 0,
+  },
+  productImage: {
+    type: String, // Store the image URL or path
+    required: true, // or not depending on your requirements
+},
+},{ timestamps: true });
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model("products", productSchema);
 
 export default Product;

@@ -1,6 +1,7 @@
 // authRouter.js
 import { Router } from 'express';
-import passport from '../middlewares/passport.js';
+import { logout, redirectUrl } from '../controllers/user.controller.js';
+import passport from "../middlewares/passport.js";
 
 const router = Router();
 
@@ -9,19 +10,10 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 
 // Google OAuth callback route
 router.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        // Successful authentication, redirect to profile
-        res.redirect('/profile');
-    }
+    passport.authenticate('google', { failureRedirect: '/' }),redirectUrl
 );
 
 // Logout route
-router.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) { return next(err); }
-        res.redirect('/');
-    });
-});
+router.get('/logout', logout);
 
 export default router;
