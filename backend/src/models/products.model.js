@@ -5,29 +5,27 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: String,
+  description: {
+    type: String,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
   },
-  category: String,
+  category: {
+    type: String,
+    required: true,
+  },
+  productImage: {
+    public_id: String,   // Stores the Cloudinary public ID
+    url: String,         // Stores the URL of the image
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  inCart: {
-    type: Boolean,
-    default: false,
-  },
-  cartQuantity: {
-    type: Number,
-    default: 0,
-  },
-  productImage: {
-    type: String, // Store the image URL or path
-    required: true, // or not depending on your requirements
-},
-},{ timestamps: true });
+}, { timestamps: true });
 
 const Product = mongoose.model("products", productSchema);
 
