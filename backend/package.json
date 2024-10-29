@@ -1,0 +1,43 @@
+{
+  "name": "ecomm-backend",
+  "version": "1.0.0",
+  "description": "A ecommerce application handle by add to cart, wisdhlist and secured user authentication also",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dollyaggarwal/ecomm-task"
+  },
+  "keywords": [
+    "backend",
+    "secured",
+    "authentication",
+    "ecommerce"
+  ],
+  "author": "Dolly Aggarwal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dollyaggarwal/ecomm-task/issues"
+  },
+  "homepage": "https://github.com/dollyaggarwal/ecomm-task#readme",
+  "dependencies": {
+    "cloudinary": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.4.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.2"
+  }
+}
