@@ -1,6 +1,6 @@
-// authRouter.js
+
 import { Router } from 'express';
-import { logout, redirectUrl } from '../controllers/user.controller.js';
+import { logout, redirectUrl  } from '../controllers/user.controller.js';
 import passport from "../middlewares/passport.js";
 
 const router = Router();

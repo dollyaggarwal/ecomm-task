@@ -8,13 +8,40 @@ export default function Wishlist() {
   useEffect(() => {
     const fetchWishlistItems = async () => {
       try {
-        const response = await api.get('/api/wishlist'); // Replace with your actual wishlist fetching route
+        const response = await api.get('/api/wishlist'); // Fetch existing wishlist items
         setWishlistItems(response.data.data);
       } catch (error) {
         console.error('Error fetching wishlist items:', error);
       }
     };
+
+    // Initialize WebSocket connection
+    const socket = new WebSocket('ws://yourserver.com'); // Replace with your server URL
+
+    socket.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.action === 'wishlistUpdated') {
+        console.log('Wishlist updated', data.wishlist);
+        // Update the wishlist items with the latest data from the server
+        setWishlistItems(data.wishlist.items);
+      }
+    };
+
+    socket.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+    };
+
+    // Fetch wishlist items when the component mounts
     fetchWishlistItems();
+
+    // Cleanup function to close the socket connection when the component unmounts
+    return () => {
+      socket.close();
+    };
   }, []);
 
   return (

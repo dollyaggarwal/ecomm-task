@@ -1,6 +1,7 @@
 // controllers/productController.js
 import Product from "../models/products.model.js";
 import Cart from '../models/cart.model.js';
+import Wishlist from '../models/wishlist.model.js';
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { ApiError } from "../utils/ApiError.js";
 
@@ -101,3 +102,59 @@ export const getUserCart = async (req, res) => {
     throw new ApiError(500, 'Error fetching cart items', error);
   }
 };
+
+// Function to add an item to the wishlist
+export const addToWishlist = async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user ID from the request
+    const { productId } = req.body; // Get product ID from the request body
+
+    // Validate if the product exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new ApiError(404, 'Product not found');
+    }
+
+    // Find or create the wishlist for the user
+    let wishlist = await Wishlist.findOne({ userId });
+    if (!wishlist) {
+      wishlist = new Wishlist({ userId, items: [] });
+    }
+
+    // Check if the product is already in the wishlist
+    const existingItem = wishlist.items.find(item => item.productId.equals(productId));
+    if (!existingItem) {
+      wishlist.items.push({ productId }); // Add new item to wishlist
+      await wishlist.save();
+
+      // Notify clients via WebSocket
+      // Assuming you have access to the WebSocket server instance
+      req.app.get('wsServer').clients.forEach(client => {
+        if (client.readyState === client.OPEN) {
+          client.send(JSON.stringify({ action: 'wishlistUpdated', wishlist }));
+        }
+      });
+    }
+
+    res.status(200).json(new ApiResponse(200, wishlist, 'Product added to wishlist successfully'));
+  } catch (error) {
+    throw new ApiError(500, 'Error adding product to wishlist', error);
+  }
+};
+
+// Function to get all items in the user's wishlist
+export const getUserWishlist = async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user ID from the request
+    const wishlist = await Wishlist.findOne({ userId }).populate('items.productId');
+
+    if (!wishlist || wishlist.items.length === 0) {
+      return res.status(200).json(new ApiResponse(200, [], 'No items in wishlist'));
+    }
+
+    res.status(200).json(new ApiResponse(200, wishlist.items, 'Wishlist items fetched successfully'));
+  } catch (error) {
+    throw new ApiError(500, 'Error fetching wishlist items', error);
+  }
+};
+
