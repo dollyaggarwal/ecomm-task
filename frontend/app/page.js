@@ -1,23 +1,17 @@
+// pages/login.js
 "use client"
 import { useEffect } from 'react';
-import axios from 'axios';
+import api from '../lib/axiosConfig';
 
 export default function Login() {
-  const handleGoogleLogin = () => {
-    // Redirect to backend route for Google OAuth
-    window.location.href = 'http://localhost:8000/auth/google'; // Adjust the port and path as per your backend configuration
-  };
-
-  useEffect(() => {
-    // After redirect from backend, check for tokens in URL and store them in local storage
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get('access_token');
-
-    if (accessToken) {
-      localStorage.setItem('access_token', accessToken);
-      window.location.href = '/products'; // Redirect to products page after successful login
+  const handleGoogleLogin = async () => {
+    try {
+     
+      const response = await api.get('/auth/google');
+    } catch (error) {
+      console.error('Error during Google login:', error);
     }
-  }, []);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

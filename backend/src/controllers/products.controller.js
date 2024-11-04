@@ -49,7 +49,6 @@ export const addProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    console.log(products, "products")
     res.status(200).json(new ApiResponse(200, products, "Products fetched successfully"));
   } catch (error) {
     throw new ApiError(500, "Error fetching products", error);

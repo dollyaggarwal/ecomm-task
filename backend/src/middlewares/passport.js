@@ -2,11 +2,6 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { callbackURL } from '../constant.js';
 import passport from 'passport';
 
-console.log({
-    clientID: process.env.YOUR_GOOGLE_CLIENT_ID,
-    clientSecret: process.env.YOUR_GOOGLE_CLIENT_SECRET,
-    callbackURL: callbackURL,
-},"google auth")
 passport.use(new GoogleStrategy({
     clientID: process.env.YOUR_GOOGLE_CLIENT_ID,
     clientSecret: process.env.YOUR_GOOGLE_CLIENT_SECRET,
@@ -17,7 +12,7 @@ passport.use(new GoogleStrategy({
         accessToken, 
         refreshToken,
       };
-    return done(null, profile);
+    return done(null, user);
 }));
 
 passport.serializeUser((user, done) => done(null, user));

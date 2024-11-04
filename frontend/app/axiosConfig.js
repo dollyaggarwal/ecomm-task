@@ -8,7 +8,7 @@ const api = axios.create({
 // Attach access token to requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -24,17 +24,17 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('refresh_token');
+      const refreshToken = localStorage.getItem('refreshToken');
       try {
         // Use your backend refresh endpoint to get a new access token
         const { data } = await axios.post('http://localhost:8000/auth/refresh', { token: refreshToken });
-        localStorage.setItem('access_token', data.access_token);
-        api.defaults.headers['Authorization'] = `Bearer ${data.access_token}`;
+        localStorage.setItem('accessToken', data.accessToken);
+        api.defaults.headers['Authorization'] = `Bearer ${data.accessToken}`;
         return api(originalRequest);
       } catch (error) {
         console.error('Refresh token expired or invalid. Redirecting to login.');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         window.location.href = '/';
       }
     }

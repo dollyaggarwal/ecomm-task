@@ -1,18 +1,13 @@
 import { ApiError } from '../utils/ApiError.js';
+import { ApiResponse } from '../utils/ApiResponse.js';
 
 export const redirectUrl = async (req, res) => {
   try {
-    // const accessToken = req.user.accessToken;
-    // const refreshToken = req.user.refreshToken;
-      console.log(req.user)
-    // if (!accessToken || !refreshToken) {
-    //   throw new Error('Tokens not found');
-    // }
-
-    res.redirect('http://localhost:3000/products');
-  } catch (error) {
+      const redirectUrl = `http://localhost:3000/products`;
+      res.redirect(redirectUrl);
+    } catch (error) {
     console.error('Error during redirect with tokens:', error);
-    res.redirect('http://localhost:3000/products?error=authentication_failed');
+    res.redirect('http://localhost:3000?error=authentication_failed');
   }
 };
   
