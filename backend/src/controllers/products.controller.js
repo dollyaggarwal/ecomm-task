@@ -126,14 +126,8 @@ export const addToWishlist = async (req, res) => {
     if (!existingItem) {
       wishlist.items.push({ productId }); // Add new item to wishlist
       await wishlist.save();
-
-      // Notify clients via WebSocket
-      // Assuming you have access to the WebSocket server instance
-      req.app.get('wsServer').clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ action: 'wishlistUpdated', wishlist }));
-        }
-      });
+      const eventEmitter = req.app.get("eventEmitter");
+            eventEmitter.emit("wishlistUpdated", wishlist);
     }
 
     res.status(200).json(new ApiResponse(200, wishlist, 'Product added to wishlist successfully'));

@@ -13,13 +13,13 @@ const setupSocket = (server) => {
       socket.join(roomId);
     });
   });
-  eventEmitter.on("orderUpdated", (data) => {
+  eventEmitter.on("wishlistUpdated", (data) => {
     //order room
-    io.to(`order_${data.id}`).emit('orderUpdated', data);
+    io.to(`wishlist_${data.id}`).emit('wishlistUpdated', data);
   });
-  eventEmitter.on("orderPlaced", (data) => {
+  eventEmitter.on("wishlistUpdated", (data) => {
     //admin order handler room
-    io.to(`adminRoom`).emit('orderPlaced', data);
+    io.to(`adminRoom`).emit('wishlist', data);
   });
 
   return eventEmitter;
